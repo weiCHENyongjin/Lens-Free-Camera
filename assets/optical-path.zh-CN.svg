@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 520" role="img" aria-labelledby="title desc">
+<title id="title">无镜头散射成像的前向模型与重建流程</title>
+<desc id="desc">场景点源经过固定随机相位散射片，在传感器形成深度相关 PSF。有效像素和逐点标定进入单表面非负反演，输出三维亮度体。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#52514e"/></marker></defs>
+<rect width="1440" height="520" fill="#fcfcfb"/>
+<text x="56" y="54" font-family="-apple-system, 'Hiragino Sans GB', sans-serif" font-size="28" font-weight="700" fill="#0b0b0b">从场景到深度体积</text>
+<text x="56" y="84" font-family="-apple-system, 'Hiragino Sans GB', sans-serif" font-size="16" fill="#52514e">物理前向传播与受掩膜约束的逆问题</text>
+<g font-family="-apple-system, 'Hiragino Sans GB', sans-serif">
+  <rect x="56" y="122" width="228" height="140" rx="8" fill="#f1f2ef"/>
+  <text x="76" y="153" font-size="13" font-weight="700" fill="#2a78d6">场景</text>
+  <circle cx="112" cy="196" r="8" fill="#eb6834"/><path d="M126 196H174M169 190L178 196L169 202" stroke="#52514e" stroke-width="2" fill="none"/>
+  <rect x="184" y="174" width="64" height="48" rx="4" fill="#fcfcfb" stroke="#c3c2b7"/>
+  <path d="M194 210V188H205V201H217V184H237V210Z" fill="#898781"/>
+  <text x="76" y="244" font-size="15" fill="#0b0b0b">非相干可见表面体素</text>
+
+  <rect x="340" y="122" width="228" height="140" rx="8" fill="#f1f2ef"/>
+  <text x="360" y="153" font-size="13" font-weight="700" fill="#2a78d6">固定相位屏</text>
+  <rect x="374" y="173" width="160" height="44" rx="3" fill="#24313a"/>
+  <path d="M380 207C397 176 409 215 426 180S455 207 472 179S500 212 528 181" fill="none" stroke="#2a78d6" stroke-width="3"/>
+  <text x="360" y="244" font-size="15" fill="#0b0b0b">T(x,y) = exp(iφ)</text>
+
+  <rect x="624" y="122" width="228" height="140" rx="8" fill="#f1f2ef"/>
+  <text x="644" y="153" font-size="13" font-weight="700" fill="#2a78d6">面阵传感器</text>
+  <g transform="translate(652 170)" fill="#52514e"><rect width="14" height="12"/><rect x="18" width="14" height="12" fill="#898781"/><rect x="36" width="14" height="12" fill="#2a78d6"/><rect y="16" width="14" height="12" fill="#898781"/><rect x="18" y="16" width="14" height="12"/><rect x="36" y="16" width="14" height="12" fill="#eb6834"/><rect y="32" width="14" height="12"/><rect x="18" y="32" width="14" height="12" fill="#fcfcfb"/><rect x="36" y="32" width="14" height="12" fill="#898781"/></g>
+  <text x="722" y="193" font-size="14" fill="#0b0b0b">强度叠加</text><text x="722" y="216" font-size="14" fill="#52514e">y = Σ xⱼ hⱼ + η</text>
+  <text x="644" y="244" font-size="15" fill="#0b0b0b">有限视场，不重归一化</text>
+
+  <rect x="908" y="122" width="228" height="140" rx="8" fill="#f1f2ef"/>
+  <text x="928" y="153" font-size="13" font-weight="700" fill="#2a78d6">有效像素掩膜</text>
+  <rect x="944" y="170" width="156" height="48" rx="3" fill="#24313a"/>
+  <path d="M944 170H1100V218H944Z" fill="#2a78d6" opacity=".8"/><path d="M944 170H1100V177H944Z M944 170H951V218H944Z M1082 207H1100V218H1082Z" fill="#fcfcfb"/>
+  <text x="928" y="244" font-size="15" fill="#0b0b0b">缺失像素不补零</text>
+
+  <rect x="1192" y="122" width="228" height="140" rx="8" fill="#f1f2ef"/>
+  <text x="1212" y="153" font-size="13" font-weight="700" fill="#2a78d6">三维重建</text>
+  <g transform="translate(1220 170)"><rect width="48" height="42" fill="#24313a"/><rect x="12" y="-8" width="48" height="42" fill="#2a78d6" opacity=".85"/><rect x="24" y="-16" width="48" height="42" fill="#eb6834" opacity=".85"/><path d="M7 32H42M20 24H54M32 16H66" stroke="#fcfcfb" stroke-width="2"/></g>
+  <text x="1308" y="190" font-size="14" fill="#0b0b0b">x̂(z,y,x)</text><text x="1308" y="214" font-size="13" fill="#52514e">6 个深度层</text>
+  <text x="1212" y="244" font-size="15" fill="#0b0b0b">非负稀疏体积</text>
+</g>
+<g stroke="#52514e" stroke-width="2" fill="none" marker-end="url(#arrow)"><path d="M289 192H327"/><path d="M573 192H611"/><path d="M857 192H895"/><path d="M1141 192H1179"/></g>
+<path d="M56 306H1384" stroke="#e1e0d9"/>
+<text x="56" y="342" font-family="-apple-system, 'Hiragino Sans GB', sans-serif" font-size="15" font-weight="700" fill="#0b0b0b">深度如何进入图案</text>
+<text x="56" y="372" font-family="-apple-system, 'Hiragino Sans GB', sans-serif" font-size="15" fill="#52514e">z 改变入射球面波曲率；每个 (x,y,z) 标定一个 PSF。</text>
+<text x="56" y="404" font-family="-apple-system, 'Hiragino Sans GB', sans-serif" font-size="15" fill="#52514e">固定散射片让不同位置与深度对应不同传感器强度分布。</text>
+<text x="746" y="342" font-family="-apple-system, 'Hiragino Sans GB', sans-serif" font-size="15" font-weight="700" fill="#0b0b0b">逆问题步骤</text>
+<text x="746" y="372" font-family="-apple-system, 'Hiragino Sans GB', sans-serif" font-size="15" fill="#52514e">共同有效像素 → 非负 L1 / FISTA → 单表面支持</text>
+<text x="746" y="404" font-family="-apple-system, 'Hiragino Sans GB', sans-serif" font-size="15" fill="#52514e">→ 低残差时进行逐射线深度更新</text>
+<text x="56" y="480" font-family="-apple-system, 'Hiragino Sans GB', sans-serif" font-size="13" fill="#898781">仿真说明：单色标量传播、薄静态相位屏、非相干强度叠加。</text>
+</svg>

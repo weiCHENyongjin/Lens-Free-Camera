@@ -1,39 +1,30 @@
 # Lens-Free Camera
 
-无镜头散射成像仿真演示。这个公开仓库保存演示材料和可复用的仿真结果，不包含重建实现代码。
+无镜头散射成像的数值仿真与三维重建演示。公开仓库仅保存说明、演示图、动画和结果数据，不包含核心实现代码。
 
-## 场景与采集
+**语言 / Language:** [简体中文](README.zh-CN.md) · [English](README.en.md)
 
-演示场景是一个带人物、书架、植物和墙面装饰的视频会议室。模拟使用固定随机相位散射片、部分缺失的传感器像素，以及 6 个深度层上的 20×16 横向体素网格。96×96 传感器中有 8,136 个有效采样点。
+## 快速查看 / At a glance
 
-![会议室散射成像的场景、传感器测量和逐深度重建结果](assets/meeting_scene_results.png)
+| 演示 / Demo | 文件 / File |
+| --- | --- |
+| 光学与反演流程 / Optical and inverse pipeline | [中文图 / ZH](assets/optical-path.zh-CN.svg) · [EN](assets/optical-path.en.svg) |
+| 深度层重建 / Depth-layer reconstruction | [中文图 / ZH](assets/reconstruction-overview.zh-CN.png) · [EN](assets/reconstruction-overview.en.png) |
+| 多 seed 稳定性 / Multi-seed stability | [中文图 / ZH](assets/depth-error-reduction.zh-CN.png) · [EN](assets/depth-error-reduction.en.png) |
+| 动画演示 / Animated demo | [中文 GIF / ZH](assets/demo.zh-CN.gif) · [EN GIF](assets/demo.en.gif) |
+| 可复用结果 / Reusable results | [NPZ 数据 / Dataset](data/meeting_scene_results.npz) |
 
-图中包含可见表面、散射片后的传感器图案、相位屏，以及真实和重建的各深度切片。灰色测量区域表示缺失像素。
+## 结果摘要 / Result summary
 
-## 一次固定种子的结果
+默认 seed 7 的合成会议室场景包含 1,920 个候选体素，分布在 6 个深度层。96×96 传感器图像有 8,136 个有效采样点。启用残差门控的 6 轮深度精修后，相对体积误差为 `0.249`，深度 argmax 准确率为 `0.944`，有效传感器像素上的相对拟合残差为 `0.0163`。
 
-| 指标 | 结果 |
-| --- | ---: |
-| 场景与相位屏 seed | 7 |
-| 体素数 | 1,920 |
-| 深度层数 | 6 |
-| 残差引导深度精修轮数 | 6 |
-| 相对传感器拟合残差 | 0.0163 |
-| 深度 argmax 准确率 | 0.944 |
-| 体积相对误差 | 0.249 |
+These are synthetic-scene metrics, not measurements from a physical camera. The complete setup and limitations are documented in both language guides.
 
-这些指标来自合成场景。模拟设置包含 500,000 期望光子计数、相对 L1 强度 0.003、空间平滑强度 0.03，以及相对残差门限 0.05。它们不代表真实光学硬件的测量精度。
+## 公开资料 / Public materials
 
-## 跨相位屏和噪声检查
+- [中文技术说明](docs/technical-notes.zh-CN.md) · [English technical notes](docs/technical-notes.en.md)
+- [中文实验与指标](docs/validation.zh-CN.md) · [English evaluation notes](docs/validation.en.md)
+- [中文逐 seed CSV](data/depth_stability_sweep.zh-CN.csv) · [English per-seed CSV](data/depth_stability_sweep.en.csv)
+- [完整会议室重建图](assets/meeting_scene_results.png)
 
-[稳定性结果表](data/depth_stability_sweep.csv)记录 phase seed 7、12、13、14，在三种高斯读出噪声强度下的基线和门控精修指标。相位屏 seed 改变散射编码；泊松采样器使用 `phase_seed + 1` 作为固定种子。噪声 `0.002` 和 `0.005` 是仿真压力测试值，不是按传感器规格标定的噪声范围。
-
-无高斯噪声的四组检查中，6 轮精修都降低了体积误差。较高读出噪声使初始相对残差超过 0.05，此时门控跳过深度交换，保留初始单表面支持。噪声会显著降低绝对深度准确率；门控只能避免精修进一步扰动结果，不能恢复测量中缺失的深度信息。
-
-## 下载结果数据
-
-[`meeting_scene_results.npz`](data/meeting_scene_results.npz)（约 55 MB）包含相位屏、网格坐标、部分标定 PSF、有效像素掩膜、测量、真实体积、重建体积和运行参数。NPZ 中体积数组轴序为 `(z, y, x)`。
-
-## 边界
-
-这是标量衍射与非相干可见表面亮度的数值原型。它不模拟宽光谱、厚散射片、多次散射、阴影、互反射或传感器饱和。单张二维测量的三维反演可能欠定，结果依赖标定、噪声和场景先验。这里的深度精修是局部坐标更新，不保证全局最优。
+深度精修仅适用于不透明单表面先验，是局部坐标更新，不保证全局最优。高残差门控在当前合成压力测试中会跳过不可靠的深度交换；阈值需要针对真实传感器重新校准。
